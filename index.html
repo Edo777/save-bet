@@ -300,20 +300,30 @@
           const totalOddsReturn = m.stake * m.total;
           const winStandard = totalOddsReturn - m.stake;
           const winWithProt = winStandard - m.premium;
+          
           const loseStandard = -m.stake;
           const loseWithProt = -(m.stake + m.premium);
-          const emotionalWin = m.rescuePayout - m.premium; 
-          const netRescuePosition = m.rescuePayout - (m.stake + m.premium);
 
+          // Scenario A: WIN
           document.getElementById("anaWinNoProt").textContent = money(winStandard);
           document.getElementById("anaWinWithProt").textContent = money(winWithProt);
-          document.getElementById("anaWinDiff").textContent = `-${money(m.premium)} Premium Sunk`;
+          document.getElementById("anaWinDiff").textContent = `-${money(m.premium)} Premium Cost`;
+
+          // Scenario B: LOSE
           document.getElementById("anaLoseNoProt").textContent = money(loseStandard);
           document.getElementById("anaLoseWithProt").textContent = money(loseWithProt);
           document.getElementById("anaLoseDiff").textContent = `Extra ${money(m.premium)} Cost`;
+
+          // Scenario C: RESCUE
+          // FIXED CALCULATION: 
+          // Net Position = What you spent (Stake + Premium) vs What you got back (Refund)
+          const netRescuePosition = m.rescuePayout - (m.stake + m.premium);
+          const totalSavedValue = m.rescuePayout - m.premium; // Real balance after recovery
+
           document.getElementById("anaResNoProt").textContent = money(loseStandard);
           document.getElementById("anaResWithProt").textContent = (netRescuePosition >= 0 ? "+" : "") + money(netRescuePosition);
-          document.getElementById("anaResDiff").textContent = `RECOVERED ${money(emotionalWin)} OF CAPITAL`;
+          document.getElementById("anaResDiff").textContent = `RECOVERED ${money(m.rescuePayout)} (- ${money(m.premium)} Fee)`;
+          
           renderSubscriptionModule(m);
       }
 
